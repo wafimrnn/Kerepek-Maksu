@@ -13,6 +13,117 @@
     <link rel="stylesheet" type="text/css" href="css/viewProduct.css">
     <link rel="stylesheet" type="text/css" href="css/notification.css">
     <style>
+    	 * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-image: url('img/pisangImage.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #481D01;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            border-bottom: 1px solid #495057;
+            padding-bottom: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+        	background-color: #FEECC3;
+            color: black;
+        }
+        
+        .nav-links a.active {
+            background-color: #F6C324;
+            color: black;
+        }
+
+        .head-bar {
+            width: calc(100% - 220px);
+            height: 60px;
+            background-color: #F6C324;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 220px;
+            z-index: 1000;
+        }
+        
+         .head-bar .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blurred-box {
+            background: #FBE39D;
+            padding: 40px;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .account-info p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .button-container button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+       	}
+       	
+       	 .main-content h1 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        
         /* Styles for Inactive Products Section */
         .inactive-products-section {
             background-color: #f9f9f9;

@@ -135,6 +135,23 @@
             z-index: -1; /* Push background below all content */
         }
         
+        .main-content h2{
+        text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            color: #343a40;
+        }
+        
         .blurred-box {
             position: relative;
             z-index: 1;
@@ -180,7 +197,7 @@
         .form-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #f9f9f9;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -223,11 +240,11 @@
     <div class="sidebar">
         <h2>Kedai Kerepek Maksu</h2>
         <div class="nav-links">
-            <a href="DashboardHome.jsp" class="active">Dashboard</a>
+            <a href="DashboardHome.jsp">Dashboard</a>
             <a href="ViewProduct.jsp">Product</a>
             <a href="CreateSales.jsp">Sales</a>
             <a href="Report.html">Report</a>
-            <a href="ViewAccount.jsp">Account</a>
+            <a href="ViewAccount.jsp" class="active">Account</a>
         </div>
     </div>
     <!-- Head Bar -->
@@ -245,17 +262,19 @@
 
                 <div class="form-group">
                     <label for="username">Username:</label>
-               
+               		<input type="text" id="username" name="username" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                  
+                  	<input type="email" id="email" name="email" required>
                 </div>
 
                 <div class="form-group">
                     <label for="status">Account Status:</label>
                     <select id="status" name="status" required>
+                    	 <option value="active">Active</option>
+                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
 
