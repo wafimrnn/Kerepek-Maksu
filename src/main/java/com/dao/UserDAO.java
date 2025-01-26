@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.manager.DBConnection;
 import com.model.User;
@@ -139,4 +141,31 @@ public class UserDAO {
         }
         return null; // Return null if user not found
     }
+    
+ // Method to get staff members by owner ID
+    public List<User> getStaffByOwnerId(int ownerId) {
+        String sql = "SELECT * FROM USERS WHERE OWNER_ID = ? AND USER_ROLE = 'STAFF'";
+        List<User> staffList = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, ownerId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("USER_ID"));
+                user.setName(rs.getString("USER_NAME"));
+                user.setRole(rs.getString("USER_ROLE"));
+                user.setPhone(rs.getString("USER_PHONE"));
+                user.setAddress(rs.getString("USER_ADDRESS"));
+                staffList.add(user);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving staff by owner ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return staffList;
+    }
+
 }
