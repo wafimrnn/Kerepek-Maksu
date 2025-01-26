@@ -5,8 +5,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Sales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="css/report.css">
-    <link rel="stylesheet" type="text/css" href="css/notification.css">
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-image: url('img/pisangImage.jpg'); /* Background image */
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            position: relative;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 220px;
+            background-color: #481D01; /* Semi-transparent background color */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(10px); /* Apply blur effect to the background */
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            border-bottom: 1px solid #495057;
+            padding-bottom: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white; /* Default font color */
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #FEECC3;
+            color: black;
+        }
+
+        .nav-links a.active {
+            background-color: #F6C324; /* Background color for active link */
+            color: black; /* Font color for active link */
+        }
+        
+        /* Head Bar Styling */
+        .head-bar {
+            width: calc(100% - 220px); /* Full width minus the sidebar width */
+            height: 60px;
+            background-color: #F6C324; /* Semi-transparent background color */
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 220px; /* Push the head bar right to align with the sidebar */
+            z-index: 1000; /* Ensure it stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px); /* Apply blur effect to the background */
+        }
+        
+        .head-bar .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+        
+        .head-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #ffffff;
+        }
+        
+        .head-bar .icons i {
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .head-bar .icons i:hover {
+            color: #ddd;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            position: relative; /* Position relative for the overlay */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 60px; /* Push content below the head bar */
+            overflow: hidden; /* Prevent overflow */
+        }
+        
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/pisangImage.jpg'); /* Path to your image */
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            
+            filter: blur(1px); /* Adjust blur intensity */
+            z-index: -1; /* Push background below all content */
+        }
+        
+        .blurred-box {
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+            background: #FBE39D;
+            backdrop-filter: blur(8px); /* Ensure this is applied correctly */
+            border-radius: 10px;
+            margin-top: 20px; /* Set a height to center vertically */
+            width: 80%;
+            text-align: center;
+            
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #343a40;
+        }
+
+        .main-content h1 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        
+        
+
+        .report-form {
+		    width: 100%;
+		    display: flex;
+		    justify-content: center; /* Center the form in the container */
+		    margin-top: 20px; /* Add spacing above the form */
+		}
+		
+		.report-form form {
+		    display: flex;
+		    align-items: center;
+		    gap: 10px; /* Space between fields */
+		    flex-wrap: nowrap; /* Prevent wrapping */
+		}
+		
+		.report-form form label {
+		    white-space: nowrap; /* Prevent labels from breaking into multiple lines */
+		}
+		
+		.report-form form select,
+		.report-form form input,
+		.report-form form button {
+		    padding: 8px;
+		    border: 1px solid #ddd;
+		    border-radius: 5px;
+		}
+		
+		.report-form form select,
+		.report-form form input {
+		    flex: 0 1 150px; /* Allow inputs to shrink if needed */
+		    min-width: 100px; /* Ensure a minimum width for readability */
+		}
+		
+		.report-form form button {
+		    flex: 0 1 auto; /* Allow the button to size naturally */
+		    background-color:  #F6C324;
+		    color: black;
+		    border: none;
+		    cursor: pointer;
+		}
+		
+		.report-form form button:hover {
+		    background-color:  #FEECC3;
+		    color: black;
+		}
+    </style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -14,7 +223,7 @@
         <h2>Kedai Kerepek Maksu</h2>
         <div class="nav-links">
             <a href="DashboardHome.jsp">Dashboard</a>
-            <a href="ViewProductServlet">Product</a>
+            <a href="ViewProduct.jsp">Product</a>
             <a href="CreateSales.jsp">Sales</a>
             <a href="Report.html" class="active">Report</a>
             <a href="ViewAccount.jsp">Account</a>
@@ -24,7 +233,7 @@
 	<div class="head-bar">
 	    <div class="title">Report</div>
 	    <div class="icons">
-	        <i class="fas fa-bell" id="notification-icon" title="Notifications"></i>
+	        <i class="fas fa-bell" title="Notifications"></i>
 	        <i class="fas fa-user-circle" title="Account"></i>
 	    </div>
 	</div>
@@ -54,9 +263,5 @@
 		</div>
 		</div>
     </div>
-    <div id="notification-popup" style="display: none;">
-	    <ul id="notification-list"></ul>
-	</div>
-	<script src="js/notification.js"></script>
 </body>
 </html>
