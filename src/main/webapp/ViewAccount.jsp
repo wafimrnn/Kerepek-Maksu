@@ -1,5 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.model.User" %>
+<%@ page import="com.dao.UserDAO" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -221,31 +223,50 @@
                 </div>
             </div>
 
-            <!-- Display Account Info (Hardcoded for now) -->
+            <!-- Display Account Info -->
             <div class="account-info">
-                <p><strong>Name:</strong> MaksuZah</p>
-                <p><strong>Phone:</strong> 01115058369</p>
-                <p><strong>Address:</strong> Merlimau, Melaka</p>
-                <p><strong>Role:</strong> OWNER</p>
-                <p><strong>Status:</strong> ACTIVE</p>
+                <% 
+                    // Retrieve the user data from session
+                    User user = (User) session.getAttribute("user"); // Assuming the user is saved in session
+
+                    if (user != null) {
+                %>
+                    <p><strong>Name:</strong> <%= user.getName() %></p>
+                    <p><strong>Phone:</strong> <%= user.getPhone() %></p>
+                    <p><strong>Address:</strong> <%= user.getAddress() %></p>
+                    <p><strong>Role:</strong> <%= user.getRole() %></p>
+                <% } else { %>
+                    <p>User data not found. Please login again.</p>
+                <% } %>
             </div>
 
             <!-- Display Staff Accounts (for OWNER only) -->
             <% if ("OWNER".equals(session.getAttribute("userRole"))) { %>
                 <h2>Manage Staff Accounts</h2>
                 <div class="staff-list">
-                    <!-- Hardcoded staff accounts list -->
-                    <div class="staff-account">
-                        <p><strong>Staff Name:</strong> NurSiti</p>
-                        <p><strong>Status:</strong> <span id="staffStatus1">ACTIVE</span></p>
-                        <button onclick="toggleStaffStatus('staffStatus1')">Toggle Status</button>
-                    </div>
-                    <div class="staff-account">
-                        <p><strong>Staff Name:</strong> FatinNjh</p>
-                        <p><strong>Status:</strong> <span id="staffStatus2">INACTIVE</span></p>
-                        <button onclick="toggleStaffStatus('staffStatus2')">Toggle Status</button>
-                    </div>
-                    <!-- Add more staff members as needed -->
+                    <!-- Dynamically display staff accounts -->
+                    <% 
+					    User loggedInUser = (User) session.getAttribute("user");
+					    if (loggedInUser != null) {
+					        UserDAO userDAO = new UserDAO();
+					        List<User> staffList = userDAO.getStaffByOwnerId(loggedInUser.getId());
+					
+					        for (User staff : staffList) {
+					            String statusClass = "ACTIVE".equals(staff.getRole()) ? "" : "inactive";
+					%>
+					            <div class="staff-account">
+					                <p><strong>Staff Name:</strong> <%= staff.getName() %></p>
+					                <p><strong>Status:</strong> <span class="<%= statusClass %>"><%= staff.getRole() %></span></p>
+					                <button onclick="toggleStaffStatus('<%= staff.getId() %>')">Toggle Status</button>
+					            </div>
+					<% 
+					        }
+					    } else { 
+					%>
+					        <p>User not logged in. Please log in again.</p>
+					<% 
+					    }
+					%>
                 </div>
             <% } %>
         </div>
@@ -259,9 +280,9 @@
     <script src="js/notification.js"></script>
 
     <script>
-        function toggleStaffStatus(staffStatusId) {
-            // Get the current status and toggle it for the specific staff
-            var statusElement = document.getElementById(staffStatusId);
+        function toggleStaffStatus(staffId) {
+            // Get the current status and toggle it for the specific staff (make AJAX call to update the status in the DB)
+            var statusElement = document.getElementById(staffId);
             var currentStatus = statusElement.innerText;
 
             // Toggle the status between 'ACTIVE' and 'INACTIVE'
