@@ -4,7 +4,126 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login/SignUp Page</title>
-  <link rel="stylesheet" type="text/css" href="css/login.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      background-image: url('img/pisangImage.jpg');
+      background-size: cover; /* Cover the entire area */
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Prevent the image from repeating */
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 90%;
+      max-width: 1200px;
+      background-color:#FBE39D;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+    }
+
+    .left-section {
+      flex: 1;
+      padding: 40px;
+      text-align: left;
+    }
+
+    .left-section h1 {
+      font-size: 32px;
+      margin: 0;
+    }
+
+    .right-section {
+      flex: 1.2;
+      padding: 40px;
+      position: relative;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-box h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-box input,
+    .form-box select,
+    .form-box textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color:  #FAD02C;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .form-box button:hover {
+      background-color: #F6C324;
+    }
+
+    .link {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-section {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .right-section {
+        padding: 20px;
+      }
+
+      .form-box {
+        max-width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -15,9 +134,7 @@
     <div class="right-section">
       <div class="form-box" id="login-form">
         <h1>Login</h1>
-        <!-- Feedback message -->
-      <p id="login-message" style="color: red;"></p>
-        <form id="login-form-data" action="LoginServlet" method="POST">
+        <form id="login-form-data" action="/Kedai-Kerepek-Maksu-Inventory-System/LoginServlet" method="POST">
           <input id="login-username" name="userName" type="text" placeholder="Username" required>
           <input id="login-password" name="password" type="password" placeholder="Password" required>
           <button type="submit">Log In</button>
@@ -29,13 +146,15 @@
 
       <div class="form-box" id="signup-form" style="display: none;">
         <h1>Sign Up</h1>
-      <!-- Feedback message -->
-      <p id="signup-message" style="color: red;"></p>
-        <form id="signup-form-data" action="SignUpServlet" method="POST">
+        <form id="signup-form-data" action="/Kedai-Kerepek-Maksu-Inventory-System/SignUpServlet" method="POST">
           <input id="signup-username" name="userName" type="text" placeholder="Username" required>
           <input id="signup-password" name="password" type="password" placeholder="Password" required>
           <input id="signup-phone" name="phone" type="text" placeholder="Phone Number" required>
-          <input type="hidden" id="signup-role" name="role" value="OWNER">
+          <select id="signup-role" name="role" required>
+            <option value="">Select Role</option>
+            <option value="OWNER">OWNER</option>
+            <option value="STAFF">STAFF</option>
+          </select>
           <textarea id="signup-address" name="address" placeholder="Address" rows="3" required></textarea>
           <button type="submit">Sign Up</button>
         </form>
@@ -45,6 +164,6 @@
       </div>
     </div>
   </div>
-<script src="js/login.js?v=1.0"></script>
+<script src="login.js?v=1.0"></script>
 </body>
 </html>
