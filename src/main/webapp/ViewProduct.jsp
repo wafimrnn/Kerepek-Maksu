@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/viewProduct.css">
     <link rel="stylesheet" type="text/css" href="css/notification.css">
     <style>
-    	* {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -72,195 +72,125 @@
             color: black; /* Font color for active link */
         }
         
+        
         /* Head Bar Styling */
-        .head-bar {
-            width: calc(100% - 220px); /* Full width minus the sidebar width */
-            height: 60px;
-            background-color: #F6C324; /* Semi-transparent background color */
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            position: fixed;
-            top: 0;
-            left: 220px; /* Push the head bar right to align with the sidebar */
-            z-index: 1000; /* Ensure it stays on top */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px); /* Apply blur effect to the background */
-        }
-        
-        .head-bar .title {
-            font-size: 20px;
-            font-weight: bold;
-            color: black;
-        }
-        
-        .head-bar .icons {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #ffffff;
-        }
-        
-        .head-bar .icons i {
-            font-size: 20px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        
-        .head-bar .icons i:hover {
-            color: #ddd;
-        }
+	    	.head-bar {
+		        width: calc(100% - 220px); /* Full width minus the sidebar width */
+		        height: 60px;
+		        background-color:  #F6C324 ;
+		        color: white;
+		        display: flex;
+		        justify-content: space-between;
+		        align-items: center;
+		        padding: 0 20px;
+		        position: fixed;
+		        top: 0;
+		        left: 220px; /* Push the head bar right to align with the sidebar */
+		        z-index: 1000; /* Ensure it stays on top */
+		        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	    	}
+		
+		    .head-bar .title {
+		        font-size: 20px;
+		        font-weight: bold;
+		    }
+		
+		    .head-bar .icons {
+		        display: flex;
+		        align-items: center;
+		        gap: 15px;
+	    	}
+		
+		    .head-bar .icons i {
+		        font-size: 20px;
+		        cursor: pointer;
+		        transition: color 0.3s ease;
+		    }
+		
+		    .head-bar .icons i:hover {
+		        color: #ddd;
+		    }
 
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-top: 60px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            margin-top: 60px; /* Push content below the head bar */
         }
-
+        
         .blurred-box {
-            background: #FBE39D;
+            position: relative;
+            z-index: 1;
             padding: 40px;
+            background: #FBE39D;
+            backdrop-filter: blur(8px); /* Ensure this is applied correctly */
             border-radius: 10px;
+            margin-top: 20px; /* Set a height to center vertically */
             width: 80%;
             text-align: center;
+            
+        }
+        
+         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .account-info p {
-            font-size: 16px;
-            margin-bottom: 10px;
+        .header h1 {
+            font-size: 28px;
+            color: #343a40;
         }
 
-        .button-container button {
+        .add-btn {
             background-color: #28a745;
             color: white;
             padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-       	}
-       	
-       	 .main-content h1 {
-            font-size: 28px;
-            color: #343a40;
-            margin-bottom: 20px;
-        }
-        
-        /* Styles for Inactive Products Section */
-        .inactive-products-section {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .inactive-products-section h2 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .update-status-btn {
-            background-color: #f44336; /* Red */
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .update-status-btn:hover {
-            background-color: #d32f2f; /* Darker red on hover */
-        }
-
-        /* Modal Style */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow: auto;
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 40%;
-            border-radius: 8px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .add-btn {
-            background: #28a745;
-            color: white;
-            padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
-            transition: 0.3s;
+            font-size: 14px;
         }
 
         .add-btn:hover {
-            background: #218838;
+            background-color: #218838;
         }
+        
+       .product-catalog {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+        gap: 20px; /* Space between cards */
+        margin-top: 20px;
+    }
 
-        .product-catalog {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+    .product-card {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
 
-        .product-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    .product-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
 
-        .product-card img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+    .product-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #333;
+    }
 
-        .product-card h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+    .product-card p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
 
-        .button-group {
+        
+       .button-group {
             margin-top: 15px;
         }
 
@@ -277,13 +207,53 @@
         .update-btn:hover, .delete-btn:hover {
             background-color: #45a049;
         }
+        
+        .update-status-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .update-status-btn:hover {
+            background-color: #45a049;
+        }
 
         .delete-btn {
             background-color: #f44336;
+            margin-right: 10px;
         }
 
         .delete-btn:hover {
             background-color: #d32f2f;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .close {
+            cursor: pointer;
+            font-size: 20px;
+            color: red;
         }
     </style>
 </head>
