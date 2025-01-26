@@ -145,7 +145,7 @@
         
        .main-content h1 {
             font-size: 28px;
-            color: #343a40;
+            color: white;
             margin-bottom: 20px;
         }
 		
