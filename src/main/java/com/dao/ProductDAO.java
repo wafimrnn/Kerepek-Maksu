@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,33 +64,84 @@ public class ProductDAO {
     }
 
     // Insert product (using Oracle sequence for PROD_ID)
-    public int insertProduct(String name, double price, int quantity, int restockLevel, String expiryDate, String imagePath) throws SQLException {
-        String sql = "INSERT INTO Products (PROD_NAME, PROD_PRICE, QUANTITY_STOCK, RESTOCK_LEVEL, EXPIRY_DATE, IMAGE_PATH, PROD_STATUS, PROD_ID) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, PRODUCTS_SEQ.NEXTVAL)";  // PROD_SEQ is the sequence
-
+    public int insertProduct(Product product) throws SQLException {
+        // Step 1: Retrieve the next PROD_ID from the sequence
+        String sequenceQuery = "SELECT PRODUCTS_SEQ.NEXTVAL FROM dual";
+        int prodId = -1;
+        
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, name);
-            ps.setDouble(2, price);
-            ps.setInt(3, quantity);
-            ps.setInt(4, restockLevel);
-            ps.setString(5, expiryDate);
-            ps.setString(6, imagePath);
-            ps.setString(7, "ACTIVE");
-
-            ps.executeUpdate();
-
-            // Now, get the PROD_ID using the sequence
-            String query = "SELECT PRODUCTS_SEQ.CURRVAL FROM DUAL";
-            try (PreparedStatement stmt = conn.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1); // Return generated product ID from the sequence
-                }
+             PreparedStatement seqPs = conn.prepareStatement(sequenceQuery);
+             ResultSet rs = seqPs.executeQuery()) {
+            
+            if (rs.next()) {
+                prodId = rs.getInt(1);  // Get the next value from the sequence
             }
         }
-        throw new SQLException("Failed to insert product and retrieve generated ID.");
+
+        if (prodId == -1) {
+            throw new SQLException("Failed to retrieve PROD_ID from sequence.");
+        }
+
+        // Step 2: Insert the product into the Products table using the retrieved PROD_ID
+        String sql = "INSERT INTO Products (PROD_ID, PROD_NAME, PROD_PRICE, QUANTITY_STOCK, RESTOCK_LEVEL, EXPIRY_DATE, IMAGE_PATH, PROD_STATUS) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, prodId);  // Use the retrieved PROD_ID
+            ps.setString(2, product.getProdName());
+            ps.setDouble(3, product.getProdPrice());
+            ps.setInt(4, product.getQuantityStock());
+            ps.setInt(5, product.getRestockLevel());
+
+            if (product.getExpiryDate() != null) {
+                ps.setDate(6, new java.sql.Date(product.getExpiryDate().getTime()));  // Handle expiry date
+            } else {
+                ps.setNull(6, java.sql.Types.DATE);  // If no expiry date is provided, set as NULL
+            }
+
+            ps.setString(7, product.getImagePath());
+            ps.setString(8, "ACTIVE");
+
+            // Execute the insert statement
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to insert product into Products table.", e);
+        }
+
+        // Step 3: Insert into the child tables (Foods or Drinks)
+        if (product instanceof Food) {
+            Food food = (Food) product;
+            String foodSql = "INSERT INTO Foods (PROD_ID, PACKAGING_TYPE, WEIGHT) VALUES (?, ?, ?)";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement psFood = conn.prepareStatement(foodSql)) {
+                psFood.setInt(1, prodId);  // Link the food with the generated PROD_ID
+                psFood.setString(2, food.getPackagingType());
+                psFood.setDouble(3, food.getWeight());
+                psFood.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new SQLException("Failed to insert product into Foods table.", e);
+            }
+        } else if (product instanceof Drink) {
+            Drink drink = (Drink) product;
+            String drinkSql = "INSERT INTO Drinks (PROD_ID, VOLUME) VALUES (?, ?)";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement psDrink = conn.prepareStatement(drinkSql)) {
+                psDrink.setInt(1, prodId);  // Link the drink with the generated PROD_ID
+                psDrink.setDouble(2, drink.getVolume());
+                psDrink.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new SQLException("Failed to insert product into Drinks table.", e);
+            }
+        }
+
+        return prodId;  // Return the generated PROD_ID
     }
+
 
     // Update product details
     public static void updateProduct(Product product) throws Exception {
