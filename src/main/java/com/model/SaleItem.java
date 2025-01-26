@@ -1,12 +1,12 @@
 package com.model;
 
 public class SaleItem {
-    private int saleId; // References SALE_ID in the sale_items table
-    private int productId; // References PROD_ID in the sale_items table
-    private int quantity; // Quantity of the product sold
-    private double subtotal; // Subtotal for this product in the sale
+    private int saleId;
+    private int prodId;
+    private int quantity;
+    private double subTotal;
 
-    // Getters and Setters
+    // Getters and setters for all fields
     public int getSaleId() {
         return saleId;
     }
@@ -15,12 +15,12 @@ public class SaleItem {
         this.saleId = saleId;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getProdId() {
+        return prodId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
     }
 
     public int getQuantity() {
@@ -31,11 +31,11 @@ public class SaleItem {
         this.quantity = quantity;
     }
 
-    public double getSubtotal() {
-        return subtotal;
+    public double getSubTotal() {
+        return subTotal;
     }
 
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 }
