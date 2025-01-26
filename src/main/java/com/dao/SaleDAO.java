@@ -14,7 +14,6 @@ import com.model.SaleItem;
 public class SaleDAO {
 
 	// Insert a new sale and return the generated sale ID
-	// Insert a new sale and return the generated sale ID
 	public int insertSale(Sale sale) throws SQLException {
 	    String getIdSQL = "SELECT SALE_SEQ.NEXTVAL FROM DUAL"; // Replace SALE_SEQ with your actual sequence name
 	    String insertSaleSQL = "INSERT INTO SALES (SALE_ID, SALE_DATE, TOTAL_AMOUNT, PAYMENT_METHOD, USER_ID) VALUES (?, ?, ?, ?, ?)";

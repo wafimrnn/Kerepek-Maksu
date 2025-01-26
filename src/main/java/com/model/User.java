@@ -6,6 +6,8 @@ public class User {
     private String role;
     private String phone;
     private String address;
+    private String userRole;
+
 
     // Getters and setters
     public int getId() { return id; }
@@ -32,5 +34,13 @@ public class User {
                ", phone='" + phone + '\'' +
                ", address='" + address + '\'' +
                '}';
+    }
+    
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }
