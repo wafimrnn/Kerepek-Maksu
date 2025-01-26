@@ -135,6 +135,7 @@ public class UserDAO {
                 user.setRole(rs.getString("USER_ROLE"));
                 user.setPhone(rs.getString("USER_PHONE"));
                 user.setAddress(rs.getString("USER_ADDRESS"));
+                user.setAccStatus(rs.getString("ACC_STATUS"));
                 return user;
             }
         } catch (SQLException e) {
@@ -169,5 +170,21 @@ public class UserDAO {
         }
         return staffList;
     }
+    
+    public boolean updateAccountStatus(int staffId, String newStatus) {
+        String sql = "UPDATE USERS SET ACC_STATUS = ? WHERE USER_ID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, staffId);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

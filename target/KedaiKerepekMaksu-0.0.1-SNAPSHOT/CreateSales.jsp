@@ -145,7 +145,7 @@
         
        .main-content h1 {
             font-size: 28px;
-            color: #ffffff;
+            color: white;
             margin-bottom: 20px;
         }
 		
@@ -326,7 +326,7 @@
         <h2>Kedai Kerepek Maksu</h2>
         <div class="nav-links">
             <a href="DashboardHome.jsp">Dashboard</a>
-            <a href="ViewProduct.jsp">Product</a>
+            <a href="ViewProductServlet">Product</a>
             <a href="CreateSales.jsp" class="active">Sales</a>
             <a href="Report.html">Report</a>
             <a href="ViewAccount.jsp">Account</a>
@@ -422,6 +422,6 @@
         </div>
    
 
-    <script src="pos.js"></script>
+    <script src="js/pos.js"></script>
 </body>
 </html>

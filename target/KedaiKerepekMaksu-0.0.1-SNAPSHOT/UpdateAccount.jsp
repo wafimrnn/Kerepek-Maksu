@@ -1,4 +1,4 @@
-<%@ page import="com.model.Account" %>
+<%@ page import="com.model.User" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,6 +135,23 @@
             z-index: -1; /* Push background below all content */
         }
         
+        .main-content h2{
+        text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            color: #343a40;
+        }
+        
         .blurred-box {
             position: relative;
             z-index: 1;
@@ -177,19 +194,28 @@
             background-color: #0056b3;
         }
 
+        /* Form Styling */
         .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
+            background-color: #f9f9f9;
             padding: 20px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
             margin-bottom: 15px;
         }
-        
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+       
         label {
             display: block;
             margin-bottom: 5px;
@@ -223,11 +249,11 @@
     <div class="sidebar">
         <h2>Kedai Kerepek Maksu</h2>
         <div class="nav-links">
-            <a href="DashboardHome.jsp" class="active">Dashboard</a>
-            <a href="ViewProduct.jsp">Product</a>
+            <a href="DashboardHome.jsp">Dashboard</a>
+            <a href="ViewProductServlet">Product</a>
             <a href="CreateSales.jsp">Sales</a>
             <a href="Report.html">Report</a>
-            <a href="ViewAccount.jsp">Account</a>
+            <a href="ViewAccount.jsp" class="active">Account</a>
         </div>
     </div>
     <!-- Head Bar -->
@@ -240,30 +266,22 @@
     <div class="blurred-box">
         <h2>Update Account</h2>
         <div class="form-container">
-            <%
-                Account account = (Account) request.getAttribute("account");
-                if (account == null) {
-            %>
-                <p style="color:red;">Account not found.</p>
-            <% } else { %>
             <form action="UpdateAccountServlet" method="post">
-                <input type="hidden" name="accountId" value="<%= account.getAccountId() %>">
-
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" value="<%= account.getUsername() %>" required>
+               		<input type="text" id="username" name="username" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="<%= account.getEmail() %>" required>
+                  	<input type="email" id="email" name="email" required>
                 </div>
 
                 <div class="form-group">
                     <label for="status">Account Status:</label>
                     <select id="status" name="status" required>
-                        <option value="Active" <%= "Active".equals(account.getStatus()) ? "selected" : "" %>>Active</option>
-                        <option value="Inactive" <%= "Inactive".equals(account.getStatus()) ? "selected" : "" %>>Inactive</option>
+                    	 <option value="active">Active</option>
+                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
 
@@ -275,7 +293,6 @@
                 <button type="submit">Update Account</button>
                 <button type="button" class="cancel-button" onclick="window.location.href='ViewAccountServlet'">Cancel</button>
             </form>
-            <% } %>
         </div>
     </div>
     </div>

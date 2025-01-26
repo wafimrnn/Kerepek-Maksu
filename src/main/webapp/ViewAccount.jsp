@@ -251,14 +251,17 @@
 					        UserDAO userDAO = new UserDAO();
 					        List<User> staffList = userDAO.getStaffByOwnerId(loggedInUser.getId());
 					
-					        for (User staff : staffList) {
-					            String statusClass = "ACTIVE".equals(staff.getRole()) ? "" : "inactive";
+					        for (User staff : staffList) { 
+					            // Ensure getAccStatus is a valid method in your User class
+					            String statusClass = "ACTIVE".equals(staff.getAccStatus()) ? "" : "inactive";
 					%>
 					            <div class="staff-account">
-					                <p><strong>Staff Name:</strong> <%= staff.getName() %></p>
-					                <p><strong>Status:</strong> <span class="<%= statusClass %>"><%= staff.getRole() %></span></p>
-					                <button onclick="toggleStaffStatus('<%= staff.getId() %>')">Toggle Status</button>
-					            </div>
+								    <p><strong>Staff Name:</strong> <%= staff.getName() %></p>
+								    <p><strong>Status:</strong> <span id="status-<%= staff.getId() %>"><%= staff.getAccStatus() %></span></p>
+								    <button onclick="toggleStaffStatus('<%= staff.getId() %>', '<%= staff.getAccStatus() %>')">
+								        Update Status
+								    </button>
+								</div>
 					<% 
 					        }
 					    } else { 
@@ -275,8 +278,6 @@
     <div id="notification-popup" style="display: none;">
         <ul id="notification-list"></ul>
     </div>
-
-    <script src="js/account.js"></script>
     <script src="js/notification.js"></script>
 
     <script>
@@ -295,8 +296,9 @@
         
         function logout() {
           // Redirect to login page
-          window.location.href = "/Kerepek-Maksu-System/LogoutServlet";
+          window.location.href = "/LogoutServlet";
         }
     </script>
+    <script src="js/account.js"></script>
 </body>
 </html>

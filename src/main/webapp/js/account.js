@@ -58,3 +58,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+//update account status
+function toggleStaffStatus(staffId, currentStatus) {
+    const newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+
+    // Send the new status to the server
+    fetch('/UpdateAccountServlet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `staffId=${staffId}&newStatus=${newStatus}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data === 'SUCCESS') {
+            // Update the status text on the page
+            const statusElement = document.getElementById(`status-${staffId}`);
+            if (statusElement) {
+                statusElement.innerText = newStatus;  // Update the status
+            }
+            alert('Account status updated successfully.');
+        } else {
+            alert('Failed to update account status.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the account status.');
+    });
+}

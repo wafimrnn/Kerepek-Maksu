@@ -1,42 +1,38 @@
 package com.controller.account;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import jakarta.servlet.http.HttpSession;
 
+import java.io.IOException;
 import com.dao.UserDAO;
+import com.model.User;
 
 public class UpdateAccountServlet extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve user inputs
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String userRole = (String) request.getSession().getAttribute("userRole");
-        boolean isUpdated = false;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        User currentUser = (User) session.getAttribute("user");
 
-        // Check if the user is the owner and wants to update the account status
-        if ("OWNER".equalsIgnoreCase(userRole)) {
-            String status = request.getParameter("status"); // Add logic to update status if necessary
-            // Optional: Use a DAO method to update status
+        // Ensure only OWNER can update statuses
+        if (currentUser == null || !"OWNER".equals(currentUser.getRole())) {
+            response.sendRedirect("Login.html");
+            return;
         }
 
-        // Update phone and address
+        String staffId = request.getParameter("staffId");
+        String newStatus = request.getParameter("newStatus");
+
+        // Add logging or error checks
+        if (staffId == null || newStatus == null) {
+            response.getWriter().write("FAIL: Missing parameters");
+            return;
+        }
+
         UserDAO userDAO = new UserDAO();
-        isUpdated = userDAO.updateUserAccount(userId, phone, address);
+        boolean isUpdated = userDAO.updateAccountStatus(Integer.parseInt(staffId), newStatus);
 
-        // Send JSON response with feedback
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        if (isUpdated) {
-            out.println("{\"message\": \"Account updated successfully!\"}");
-        } else {
-            out.println("{\"error\": \"An error occurred while updating your account.\"}");
-        }
+        // Send success or failure response
+        response.getWriter().write(isUpdated ? "SUCCESS" : "FAIL");
     }
 }

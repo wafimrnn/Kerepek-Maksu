@@ -13,6 +13,117 @@
     <link rel="stylesheet" type="text/css" href="css/viewProduct.css">
     <link rel="stylesheet" type="text/css" href="css/notification.css">
     <style>
+    	 * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-image: url('img/pisangImage.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #481D01;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            border-bottom: 1px solid #495057;
+            padding-bottom: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+        	background-color: #FEECC3;
+            color: black;
+        }
+        
+        .nav-links a.active {
+            background-color: #F6C324;
+            color: black;
+        }
+
+        .head-bar {
+            width: calc(100% - 220px);
+            height: 60px;
+            background-color: #F6C324;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 220px;
+            z-index: 1000;
+        }
+        
+         .head-bar .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blurred-box {
+            background: #FBE39D;
+            padding: 40px;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .account-info p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .button-container button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+       	}
+       	
+       	 .main-content h1 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        
         /* Styles for Inactive Products Section */
         .inactive-products-section {
             background-color: #f9f9f9;
@@ -130,88 +241,89 @@
 	</div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="blurred-box">
-            <!-- Header with Title and Add Product Button -->
-            <div class="header">
-                <h1>Products</h1>
-                <a href="CreateProduct.html" class="add-btn">Add Product</a>
-            </div>
+<div class="main-content">
+    <div class="blurred-box">
+        <!-- Header with Title and Add Product Button -->
+        <div class="header">
+            <h1>Products</h1>
+            <a href="CreateProduct.html" class="add-btn">Add Product</a>
+        </div>
 
-            <!-- Product Catalog -->
-			<div class="product-catalog">
-			    <%
-				    List<Product> products = (List<Product>) request.getAttribute("products");
-				    if (products != null && !products.isEmpty()) {
-				        for (Product product : products) {
-				            String imagePath = product.getImagePath();
-				            if (imagePath == null || imagePath.isEmpty()) {
-				                imagePath = "img/default-image.jpg"; 
-				            }
+        <!-- Product Catalog -->
+        <div class="product-catalog">
+            <%
+                List<Product> products = (List<Product>) request.getAttribute("products");
+                if (products != null && !products.isEmpty()) {
+                    for (Product product : products) {
+                        String imagePath = product.getImagePath();
+                        if (imagePath == null || imagePath.isEmpty()) {
+                            imagePath = "img/default-image.jpg"; 
+                        }
 
-                            // If product is active, don't show "Update Status" button
-                            if (!"inactive".equals(product.getProdStatus())) {
-                %>
-				            <div class="product-card">
-				                <img src="<%= imagePath %>" alt="<%= product.getProdName() %>">
-				                <h3><%= product.getProdName() %></h3>
-				                <p>Price: RM <%= product.getProdPrice() %></p>
-				                <p>Stock: <%= product.getQuantityStock() %></p>
+                        // If product is active, don't show "Update Status" button
+                        if (!"inactive".equals(product.getProdStatus())) {
+            %>
+                        <div class="product-card">
+                            <img src="<%= imagePath %>" alt="<%= product.getProdName() %>">
+                            <h3><%= product.getProdName() %></h3>
+                            <p>Price: RM <%= product.getProdPrice() %></p>
+                            <p>Stock: <%= product.getQuantityStock() %></p>
 
-				                <div class="button-group">
-				                    <button class="update-btn" onclick="location.href='UpdateProductServlet?prodId=<%= product.getProdId() %>'">
-				                        Update
-				                    </button>
-				                    <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
-				                        Delete
-				                    </button>
-				                </div>
-				            </div>
-                <% 
-                            }
-				        }
-				    } else {
-				%>
-				        <p>No products available.</p>
-				<%
-				    }
-				%>
-			</div>
-
-            <!-- Hardcoded Owner-Specific Section for Inactive Products -->
-            <div class="inactive-products-section">
-                <h2>Inactive Products</h2>
-                <div class="product-catalog">
-                    <!-- Hardcoded inactive product data -->
-                    <div class="product-card">
-                        <img src="img/default-image.jpg" alt="Inactive Product">
-                        <h3>Rempeyek Kacang Dhal</h3>
-                        <p>Price: RM 16.50</p>
-                        <p>Stock: 0</p>
-                        <p>Status: inactive</p>
-                        <div class="button-group">
-                            <button class="update-status-btn" onclick="showPopup()">
-                                Update Status
-                            </button>
+                            <div class="button-group">
+                                <button class="update-btn" onclick="location.href='UpdateProductServlet?prodId=<%= product.getProdId() %>'">
+                                    Update
+                                </button>
+                                <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
+                                    Delete
+                                </button>
+                            </div>
                         </div>
-                    </div>
+            <% 
+                        }
+                    }
+                } else {
+            %>
+                    <p>No products available.</p>
+            <%
+                }
+            %>
+        </div>
 
-                    <div class="product-card">
-                        <img src="img/default-image.jpg" alt="Inactive Product">
-                        <h3>Kacang Atom</h3>
-                        <p>Price: RM 12.00</p>
-                        <p>Stock: 0</p>
-                        <p>Status: inactive</p>
-                        <div class="button-group">
-                            <button class="update-status-btn" onclick="showPopup()">
-                                Update Status
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Hardcoded Owner-Specific Section for Inactive Products -->
+        <div class="inactive-products-section">
+            <h2>Inactive Products</h2>
+            <% 
+			    String userRole = (String) session.getAttribute("userRole");
+			    if ("OWNER".equals(userRole) && products != null) {  // Ensure products are not null
+			        for (Product product : products) {
+			            if ("inactive".equals(product.getProdStatus())) {
+			%>
+			            <div class="product-card inactive-product">
+			                <img src="<%= product.getImagePath() != null ? product.getImagePath() : "img/default-image.jpg" %>" alt="<%= product.getProdName() %>">
+			                <h3><%= product.getProdName() %></h3>
+			                <p>Price: RM <%= product.getProdPrice() %></p>
+			                <p>Stock: <%= product.getQuantityStock() %></p>
+			                <p>Status: Inactive</p>
+			
+			                <div class="button-group">
+			                    <button class="update-status-btn" onclick="location.href='UpdateProductStatusServlet?prodId=<%= product.getProdId() %>'">
+			                        Update Status
+			                    </button>
+			                    <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
+			                        Delete
+			                    </button>
+			                </div>
+			            </div>
+			<% 
+			            }
+			        }
+			    }
+			%>
         </div>
     </div>
+</div>
+
+
 
     <!-- Simple Popup Modal for Confirmation -->
     <div id="popup-modal" class="modal">
