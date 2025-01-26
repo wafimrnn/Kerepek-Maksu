@@ -194,19 +194,28 @@
             background-color: #0056b3;
         }
 
+        /* Form Styling */
         .form-container {
-            max-width: 600px;
-            margin: 0 auto;
             background-color: #f9f9f9;
             padding: 20px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
             margin-bottom: 15px;
         }
-        
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+       
         label {
             display: block;
             margin-bottom: 5px;
@@ -258,8 +267,6 @@
         <h2>Update Account</h2>
         <div class="form-container">
             <form action="UpdateAccountServlet" method="post">
-        
-
                 <div class="form-group">
                     <label for="username">Username:</label>
                		<input type="text" id="username" name="username" required>
