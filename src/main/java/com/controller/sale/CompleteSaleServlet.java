@@ -31,6 +31,7 @@ public class CompleteSaleServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	System.out.println("Received a POST request at CompleteSaleServlet");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 

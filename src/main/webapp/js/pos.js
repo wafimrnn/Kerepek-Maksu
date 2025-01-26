@@ -116,7 +116,7 @@ function completeOrder() {
         };
 
         // Send POST request to the backend
-        fetch("/Kedai-Kerepek-Maksu-Inventory-System/CompleteSaleServlet", {
+        fetch("http://localhost:8088/KedaiKerepekMaksu/CompleteSaleServlet", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

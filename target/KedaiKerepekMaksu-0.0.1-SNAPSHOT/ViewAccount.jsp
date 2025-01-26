@@ -1,5 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.model.User" %>
+<%@ page import="com.dao.UserDAO" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +12,123 @@
     <link rel="stylesheet" type="text/css" href="css/viewAccount.css">
     <link rel="stylesheet" type="text/css" href="css/notification.css">
     <style>
+		 * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-image: url('img/pisangImage.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #481D01;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            border-bottom: 1px solid #495057;
+            padding-bottom: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+        	background-color: #FEECC3;
+            color: black;
+        }
+        
+        .nav-links a.active {
+            background-color: #F6C324;
+            color: black;
+        }
+
+        .head-bar {
+            width: calc(100% - 220px);
+            height: 60px;
+            background-color: #F6C324;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 220px;
+            z-index: 1000;
+        }
+        
+         .head-bar .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blurred-box {
+            background: #FBE39D;
+            padding: 40px;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .account-info p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .button-container button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+       	}
+       	
+       	 .main-content h1 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
     .staff-list {
         margin-top: 20px;
         padding: 15px;
         background-color: #f9f9f9;
-        border: 1px solid #ddd;
+        border: 1px solid black;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -23,7 +137,7 @@
         font-size: 1.5rem;
         color: #333;
         margin-bottom: 10px;
-        border-bottom: 2px solid #ddd;
+        border-bottom: 2px solid black;
         padding-bottom: 5px;
     }
 
@@ -105,35 +219,57 @@
                         <button class="add-btn" onclick="location.href='CreateStaffAccount.jsp'">Create Staff Account</button>
                     <% } %>
 
-                    <button class="add-btn logout-btn" onclick="location.href='/Kedai-Kerepek-Maksu-Inventory-System/LogoutServlet'">Logout</button>
+                    <button class="add-btn logout-btn" onclick="logout()">Logout</button>
                 </div>
             </div>
 
-            <!-- Display Account Info (Hardcoded for now) -->
+            <!-- Display Account Info -->
             <div class="account-info">
-                <p><strong>Name:</strong> MaksuZah</p>
-                <p><strong>Phone:</strong> 01115058369</p>
-                <p><strong>Address:</strong> Merlimau, Melaka</p>
-                <p><strong>Role:</strong> OWNER</p>
-                <p><strong>Status:</strong> ACTIVE</p>
+                <% 
+                    // Retrieve the user data from session
+                    User user = (User) session.getAttribute("user"); // Assuming the user is saved in session
+
+                    if (user != null) {
+                %>
+                    <p><strong>Name:</strong> <%= user.getName() %></p>
+                    <p><strong>Phone:</strong> <%= user.getPhone() %></p>
+                    <p><strong>Address:</strong> <%= user.getAddress() %></p>
+                    <p><strong>Role:</strong> <%= user.getRole() %></p>
+                <% } else { %>
+                    <p>User data not found. Please login again.</p>
+                <% } %>
             </div>
 
             <!-- Display Staff Accounts (for OWNER only) -->
             <% if ("OWNER".equals(session.getAttribute("userRole"))) { %>
                 <h2>Manage Staff Accounts</h2>
                 <div class="staff-list">
-                    <!-- Hardcoded staff accounts list -->
-                    <div class="staff-account">
-                        <p><strong>Staff Name:</strong> NurSiti</p>
-                        <p><strong>Status:</strong> <span id="staffStatus1">ACTIVE</span></p>
-                        <button onclick="toggleStaffStatus('staffStatus1')">Toggle Status</button>
-                    </div>
-                    <div class="staff-account">
-                        <p><strong>Staff Name:</strong> FatinNjh</p>
-                        <p><strong>Status:</strong> <span id="staffStatus2">INACTIVE</span></p>
-                        <button onclick="toggleStaffStatus('staffStatus2')">Toggle Status</button>
-                    </div>
-                    <!-- Add more staff members as needed -->
+                    <!-- Dynamically display staff accounts -->
+                    <% 
+					    User loggedInUser = (User) session.getAttribute("user");
+					    if (loggedInUser != null) {
+					        UserDAO userDAO = new UserDAO();
+					        List<User> staffList = userDAO.getStaffByOwnerId(loggedInUser.getId());
+					
+					        for (User staff : staffList) { 
+					            // Ensure getAccStatus is a valid method in your User class
+					            String statusClass = "ACTIVE".equals(staff.getAccStatus()) ? "" : "inactive";
+					%>
+					            <div class="staff-account">
+								    <p><strong>Staff Name:</strong> <%= staff.getName() %></p>
+								    <p><strong>Status:</strong> <span id="status-<%= staff.getId() %>"><%= staff.getAccStatus() %></span></p>
+								    <button onclick="toggleStaffStatus('<%= staff.getId() %>', '<%= staff.getAccStatus() %>')">
+								        Update Status
+								    </button>
+								</div>
+					<% 
+					        }
+					    } else { 
+					%>
+					        <p>User not logged in. Please log in again.</p>
+					<% 
+					    }
+					%>
                 </div>
             <% } %>
         </div>
@@ -142,14 +278,12 @@
     <div id="notification-popup" style="display: none;">
         <ul id="notification-list"></ul>
     </div>
-
-    <script src="js/account.js"></script>
     <script src="js/notification.js"></script>
 
     <script>
-        function toggleStaffStatus(staffStatusId) {
-            // Get the current status and toggle it for the specific staff
-            var statusElement = document.getElementById(staffStatusId);
+        function toggleStaffStatus(staffId) {
+            // Get the current status and toggle it for the specific staff (make AJAX call to update the status in the DB)
+            var statusElement = document.getElementById(staffId);
             var currentStatus = statusElement.innerText;
 
             // Toggle the status between 'ACTIVE' and 'INACTIVE'
@@ -159,6 +293,12 @@
                 statusElement.innerText = 'ACTIVE';
             }
         }
+        
+        function logout() {
+          // Redirect to login page
+          window.location.href = "/LogoutServlet";
+        }
     </script>
+    <script src="js/account.js"></script>
 </body>
 </html>
