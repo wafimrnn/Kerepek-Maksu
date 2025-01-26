@@ -180,35 +180,7 @@
 
             <!-- Hardcoded Owner-Specific Section for Inactive Products -->
             <div class="inactive-products-section">
-                <h2>Inactive Products</h2>
-                <div class="product-catalog">
-                    <!-- Hardcoded inactive product data -->
-                    <div class="product-card">
-                        <img src="img/default-image.jpg" alt="Inactive Product">
-                        <h3>Rempeyek Kacang Dhal</h3>
-                        <p>Price: RM 16.50</p>
-                        <p>Stock: 0</p>
-                        <p>Status: inactive</p>
-                        <div class="button-group">
-                            <button class="update-status-btn" onclick="showPopup()">
-                                Update Status
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="img/default-image.jpg" alt="Inactive Product">
-                        <h3>Kacang Atom</h3>
-                        <p>Price: RM 12.00</p>
-                        <p>Stock: 0</p>
-                        <p>Status: inactive</p>
-                        <div class="button-group">
-                            <button class="update-status-btn" onclick="showPopup()">
-                                Update Status
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

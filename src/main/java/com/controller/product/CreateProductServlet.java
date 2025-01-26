@@ -50,10 +50,10 @@ public class CreateProductServlet extends HttpServlet {
                 if ("Food".equalsIgnoreCase(category)) {
                     String packagingType = request.getParameter("packagingType");
                     double weight = Double.parseDouble(request.getParameter("weight"));
-                    foodDAO.insertFood(conn, prodId, packagingType, weight);
+                    foodDAO.insertFood(conn, packagingType, weight);  // Adjusted call
                 } else if ("Drink".equalsIgnoreCase(category)) {
                     double volume = Double.parseDouble(request.getParameter("volume"));
-                    drinkDAO.insertDrink(conn, prodId, volume);
+                    drinkDAO.insertDrink(conn, volume);  // Adjusted call
                 }
 
                 conn.commit();

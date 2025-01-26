@@ -8,11 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.dao.SaleDAO;
+import com.manager.DBConnection;
 import com.model.Sale;
 import com.model.SaleItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +56,16 @@ public class CompleteSaleServlet extends HttpServlet {
             Date saleDateObj = Date.valueOf(saleDate); // Throws IllegalArgumentException if invalid
 
             // Create Sale object
+         // Convert java.sql.Date to String
+            String saleDateString = saleDateObj.toString(); // You can adjust the format if needed
+
+            // Create Sale object
             Sale sale = new Sale();
-            sale.setSaleDate(saleDateObj); // Convert to SQL Date
+            sale.setSaleDate(saleDateString); // Set the formatted date as String
             sale.setTotalAmount(totalAmount);
             sale.setPaymentMethod(paymentMethod);
             sale.setUserId(userId);
+
 
             // Step 3: Extract order items
             JSONArray orderItems = requestData.getJSONArray("orderItems");
@@ -67,18 +74,22 @@ public class CompleteSaleServlet extends HttpServlet {
                 JSONObject item = orderItems.getJSONObject(i);
 
                 SaleItem saleItem = new SaleItem();
-                saleItem.setProductId(item.getInt("prodId"));
+                saleItem.setProdId(item.getInt("prodId"));
                 saleItem.setQuantity(item.getInt("qty"));
-                saleItem.setSubtotal(item.getDouble("subtotal"));
+                saleItem.setSubTotal(item.getDouble("subtotal"));
                 saleItems.add(saleItem);
             }
 
             // Step 4: Persist sale and sale items using DAO
             int saleId = saleDAO.insertSale(sale); // Insert sale and get ID
-            for (SaleItem item : saleItems) {
-                item.setSaleId(saleId); // Set sale ID for each item
+
+            // Correcting the insertSaleItems call
+            try (Connection conn = DBConnection.getConnection()) {
+                for (SaleItem item : saleItems) {
+                    item.setSaleId(saleId); // Set sale ID for each item
+                }
+                saleDAO.insertSaleItems(conn, saleId, saleItems); // Correct method call
             }
-            saleDAO.insertSaleItems(saleItems);
 
             // Step 5: Send response back to frontend (success)
             JSONObject responseJson = new JSONObject();
