@@ -138,6 +138,7 @@
         .main-content h2{
         text-align: center;
         }
+        
         .header {
             display: flex;
             justify-content: space-between;
@@ -241,6 +242,7 @@
 
         .cancel-button {
             background-color: #dc3545;
+             margin-left: 250px;
         }
     </style>
 </head>
@@ -267,29 +269,32 @@
         <h2>Update Account</h2>
         <div class="form-container">
             <form action="UpdateAccountServlet" method="post">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-               		<input type="text" id="username" name="username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                  	<input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="status">Account Status:</label>
-                    <select id="status" name="status" required>
-                    	 <option value="active">Active</option>
-                         <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-
+                	<div class="form-group">
+                       <label for="username">Username:</label>
+                       <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select id="role" name="role" required>
+                            <option value="Owner">Owner</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Account Status:</label>
+                        <select id="status" name="status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
                 <button type="submit">Update Account</button>
                 <button type="button" class="cancel-button" onclick="window.location.href='ViewAccountServlet'">Cancel</button>
             </form>

@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/viewProduct.css">
     <link rel="stylesheet" type="text/css" href="css/notification.css">
     <style>
-    	 * {
+    	* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -23,31 +23,39 @@
         body {
             display: flex;
             min-height: 100vh;
-            background-image: url('img/pisangImage.jpg');
-            background-size: cover;
-            background-position: center;
+            background-image: url('img/pisangImage.jpg'); /* Background image */
+            background-size: cover; /* Cover the entire area */
+            background-position: center; /* Center the image */
+            position: relative;
         }
 
+        /* Sidebar Styling */
         .sidebar {
             width: 220px;
-            background-color: #481D01;
+            background-color: #481D01; /* Semi-transparent background color */
             color: white;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px); /* Apply blur effect to the background */
         }
 
         .sidebar h2 {
+            margin-bottom: 20px;
             text-align: center;
             font-size: 20px;
             border-bottom: 1px solid #495057;
             padding-bottom: 10px;
         }
 
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+        }
+
         .nav-links a {
             text-decoration: none;
-            color: white;
+            color: white; /* Default font color */
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
@@ -55,34 +63,54 @@
         }
 
         .nav-links a:hover {
-        	background-color: #FEECC3;
-            color: black;
-        }
-        
-        .nav-links a.active {
-            background-color: #F6C324;
+            background-color: #FEECC3;
             color: black;
         }
 
+        .nav-links a.active {
+            background-color: #F6C324; /* Background color for active link */
+            color: black; /* Font color for active link */
+        }
+        
+        /* Head Bar Styling */
         .head-bar {
-            width: calc(100% - 220px);
+            width: calc(100% - 220px); /* Full width minus the sidebar width */
             height: 60px;
-            background-color: #F6C324;
-            color: black;
+            background-color: #F6C324; /* Semi-transparent background color */
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
             position: fixed;
             top: 0;
-            left: 220px;
-            z-index: 1000;
+            left: 220px; /* Push the head bar right to align with the sidebar */
+            z-index: 1000; /* Ensure it stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px); /* Apply blur effect to the background */
         }
         
-         .head-bar .title {
+        .head-bar .title {
             font-size: 20px;
             font-weight: bold;
             color: black;
+        }
+        
+        .head-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #ffffff;
+        }
+        
+        .head-bar .icons i {
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .head-bar .icons i:hover {
+            color: #ddd;
         }
 
         .main-content {
@@ -189,6 +217,47 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+        
+        .add-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        .product-catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .product-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
 
         .button-group {
@@ -310,10 +379,10 @@
 
     <script>
  // Function to update the product status (mock-up)
-    function updateStatus() {
-        alert("Product status updated!");
-        closePopup();
-    }
+    	function updateStatus() {
+       	 	alert("Product status updated!");
+       		closePopup();
+   		}
 
         // Confirm delete action
         function confirmDelete(prodId) {

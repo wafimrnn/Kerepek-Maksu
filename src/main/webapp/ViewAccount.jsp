@@ -217,7 +217,7 @@
                         <button class="add-btn" onclick="location.href='CreateStaffAccount.jsp'">Create Staff Account</button>
                     <% } %>
 
-                    <button class="add-btn logout-btn" onclick="logout()">Logout</button>
+                    <button class="add-btn logout-btn" onclick="location.href='/Kerepek-Maksu-System/LogoutServlet'">Logout</button>
                 </div>
             </div>
 
@@ -270,11 +270,6 @@
             } else {
                 statusElement.innerText = 'ACTIVE';
             }
-        }
-        
-        function logout() {
-          // Redirect to login page
-          window.location.href = "/Kerepek-Maksu-System/LogoutServlet";
         }
     </script>
 </body>
