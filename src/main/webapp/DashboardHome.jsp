@@ -201,5 +201,11 @@
             <h1>KEDAI KEREPEK MAKSU</h1>
         </div>
     </div>
+    <% 
+    String successMessage = (String) request.getAttribute("success");
+    if (successMessage != null) {
+        out.println("<div class='success'>" + successMessage + "</div>");
+    }
+%>
 </body>
 </html>

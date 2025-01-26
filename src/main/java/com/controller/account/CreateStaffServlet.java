@@ -15,7 +15,7 @@ import com.model.User;
 public class CreateStaffServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute("loggedInUser");
+        User currentUser = (User) session.getAttribute("user");
 
         if (currentUser != null && "OWNER".equals(currentUser.getRole())) {
             String username = request.getParameter("userName");
@@ -27,13 +27,17 @@ public class CreateStaffServlet extends HttpServlet {
             boolean isCreated = userDAO.createStaff(username, password, phone, address, currentUser.getId());
 
             if (isCreated) {
-                response.sendRedirect("DashboardHome.jsp?success=Staff created successfully");
+                // Set success attribute and redirect to the dashboard page
+                request.setAttribute("success", "Staff account created successfully!");
+                request.getRequestDispatcher("DashboardHome.jsp").forward(request, response);
             } else {
+                // Set error attribute and forward to the create staff page
                 request.setAttribute("error", "Failed to create staff account.");
-                request.getRequestDispatcher("CreateStaff.html").forward(request, response);
+                request.getRequestDispatcher("CreateStaff.jsp").forward(request, response);
             }
         } else {
-            response.sendRedirect("Login.html"); // Redirect to login if not logged in as owner.
+            // Redirect to login if not logged in as owner
+            response.sendRedirect("Login.html");
         }
     }
 }

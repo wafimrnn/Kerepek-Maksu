@@ -63,12 +63,13 @@ public class UserDAO {
 
     // Method to create a staff account
     public boolean createStaff(String username, String password, String phone, String address, int ownerId) {
-        String query = "INSERT INTO USERS (USER_NAME, USER_ROLE, USER_PASS, USER_PHONE, USER_ADDRESS, ACC_STATUS, OWNER_ID) VALUES (?, 'STAFF', ?, ?, ?, 'ACTIVE', ?)";
+    	String query = "INSERT INTO USERS (USER_ID, USER_NAME, USER_ROLE, USER_PASS, USER_PHONE, USER_ADDRESS, ACC_STATUS, OWNER_ID) " +
+                "VALUES (USERS_SEQ.NEXTVAL, ?, 'STAFF', ?, ?, ?, 'ACTIVE', ?)";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);  // Store plain-text password
+            stmt.setString(2, password);  // Hash the password before storing
             stmt.setString(3, phone);
             stmt.setString(4, address);
             stmt.setInt(5, ownerId);
@@ -80,6 +81,7 @@ public class UserDAO {
         }
         return false;
     }
+
 
     // Method to check if the username is already taken
     public boolean isUsernameTaken(String username) {

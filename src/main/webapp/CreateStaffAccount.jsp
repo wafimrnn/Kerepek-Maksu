@@ -180,7 +180,7 @@
         </div>
 
         <div class="form-container">
-            <form action="CreateStaffAccountServlet" method="post">
+            <form action="CreateStaffServlet" method="post">
                 <div class="form-group">
                     <label for="userName">Username:</label>
                     <input type="text" id="userName" name="userName" required>
@@ -211,5 +211,11 @@
             </form>
         </div>
     </div>
+    <% 
+    String errorMessage = (String) request.getAttribute("error");
+    if (errorMessage != null) {
+        out.println("<div class='error'>" + errorMessage + "</div>");
+    }
+%>
 </body>
 </html>
