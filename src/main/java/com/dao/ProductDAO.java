@@ -178,41 +178,43 @@ public class ProductDAO {
         }
     }
 
-    private static final String GET_PRODUCT_BY_ID_QUERY = "SELECT * FROM PRODUCTS WHERE PROD_ID = ?";
-    private static final String UPDATE_PRODUCT_STATUS_QUERY = "UPDATE PRODUCTS SET PROD_STATUS = ? WHERE PROD_ID = ?";
+    public Product getProductById(String prodId) {
+        String query = "SELECT * FROM Product WHERE prodId = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            // Convert prodId to int, assuming it is stored as an integer in the database
+            statement.setInt(1, Integer.parseInt(prodId));
 
-    // Get product by ID
-    public Product getProductById(int prodId) {
-        Product product = null;
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(GET_PRODUCT_BY_ID_QUERY)) {
-            stmt.setInt(1, prodId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    product = new Product();
-                    product.setProdId(rs.getInt("PROD_ID"));
-                    product.setProdName(rs.getString("PROD_NAME"));
-                    product.setProdPrice(rs.getDouble("PROD_PRICE"));
-                    product.setQuantityStock(rs.getInt("QUANTITY_STOCK"));
-                    product.setProdStatus(rs.getString("PROD_STATUS"));
-                    product.setImagePath(rs.getString("IMAGE_PATH"));
-                }
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Product product = new Product();
+                product.setProdId(resultSet.getInt("prodId")); // Adjusted for int
+                product.setProdName(resultSet.getString("prodName"));
+                product.setProdPrice(resultSet.getDouble("prodPrice"));
+                product.setQuantityStock(resultSet.getInt("quantityStock"));
+                product.setProdStatus(resultSet.getString("prodStatus"));
+                product.setImagePath(resultSet.getString("imagePath"));
+                return product;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return product;
+        return null;
     }
 
     // Update product status
-    public void updateProductStatus(Product product) {
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UPDATE_PRODUCT_STATUS_QUERY)) {
-            stmt.setString(1, product.getProdStatus());
-            stmt.setInt(2, product.getProdId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
+    public boolean updateProductStatus(Product product) {
+        String query = "UPDATE Product SET prodStatus = ? WHERE prodId = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, product.getProdStatus()); // Set product status
+            statement.setInt(2, product.getProdId());        // Adjusted for int
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
+
 }

@@ -92,7 +92,7 @@ public class CreateProductServlet extends HttpServlet {
 
                 // Provide feedback and redirect
                 request.setAttribute("successMessage", "Product successfully added!");
-                response.sendRedirect("ViewProduct.jsp");
+                response.sendRedirect("ViewProductServlet");
             } catch (SQLException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error: " + e.getMessage());
                 e.printStackTrace();

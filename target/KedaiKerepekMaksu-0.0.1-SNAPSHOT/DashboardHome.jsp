@@ -1,3 +1,8 @@
+<%@ page import="com.model.Sale" %>
+<%@ page import="com.dao.SaleDAO" %>
+<%@ page import="com.model.Product" %>
+<%@ page import="com.dao.ProductDAO" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,21 +22,21 @@
         body {
             display: flex;
             min-height: 100vh;
-            background-image: url('img/pisangImage.jpg'); /* Background image */
-            background-size: cover; /* Cover the entire area */
-            background-position: center; /* Center the image */
+            background-image: url('img/pisangImage.jpg');
+            background-size: cover;
+            background-position: center;
             position: relative;
         }
 
         /* Sidebar Styling */
         .sidebar {
             width: 220px;
-            background-color: #481D01; /* Semi-transparent background color */
+            background-color: #481D01;
             color: white;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            backdrop-filter: blur(10px); /* Apply blur effect to the background */
+            backdrop-filter: blur(10px);
         }
 
         .sidebar h2 {
@@ -49,7 +54,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: white; /* Default font color */
+            color: white;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
@@ -62,15 +67,15 @@
         }
 
         .nav-links a.active {
-            background-color: #F6C324; /* Background color for active link */
-            color: black; /* Font color for active link */
+            background-color: #F6C324;
+            color: black;
         }
-        
+
         /* Head Bar Styling */
         .head-bar {
-            width: calc(100% - 220px); /* Full width minus the sidebar width */
+            width: calc(100% - 220px);
             height: 60px;
-            background-color: #F6C324; /* Semi-transparent background color */
+            background-color: #F6C324;
             color: white;
             display: flex;
             justify-content: space-between;
@@ -78,31 +83,31 @@
             padding: 0 20px;
             position: fixed;
             top: 0;
-            left: 220px; /* Push the head bar right to align with the sidebar */
-            z-index: 1000; /* Ensure it stays on top */
+            left: 220px;
+            z-index: 1000;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px); /* Apply blur effect to the background */
+            backdrop-filter: blur(10px);
         }
-        
+
         .head-bar .title {
             font-size: 20px;
             font-weight: bold;
             color: black;
         }
-        
+
         .head-bar .icons {
             display: flex;
             align-items: center;
             gap: 15px;
             color: #ffffff;
         }
-        
+
         .head-bar .icons i {
             font-size: 20px;
             cursor: pointer;
             transition: color 0.3s ease;
         }
-        
+
         .head-bar .icons i:hover {
             color: #ddd;
         }
@@ -111,65 +116,65 @@
         .main-content {
             flex: 1;
             padding: 20px;
-            position: relative; /* Position relative for the overlay */
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-top: 60px; /* Push content below the head bar */
-            overflow: hidden; /* Prevent overflow */
+            justify-content: flex-start;
+            margin-top: 60px;
+            overflow: hidden;
         }
-        
-        .main-content h2 {
-      		font-size: 30px;
-      		letter-spacing: 10px;
-      		margin-bottom: 20px;
-      		font-weight: bold;
-      		position: relative;
-      		z-index: 2;
-      		color: black;
-    	}
 
-    	/* Kedai Kerepek Maksu Heading */
-    		.main-content h1 {
-      		font-size: 60px;
-      		font-weight: bold;
-      		margin-bottom: 90px;
-      		position: relative;
-      		z-index: 2;
-      		color: #481D01;
-    	}
-
-        .main-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('img/pisangImage.jpg'); /* Path to your image */
-            background-size: cover; /* Cover the entire area */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent the image from repeating */
-            filter: blur(1px); /* Adjust blur intensity */
-            z-index: -1; /* Push background below all content */
-        }
-         
-         /* Blurry Box */
-         .blurred-box {
-            position: relative;
-            z-index: 1;
-            padding: 40px;
+        .section {
+            width: 90%;
+            max-width: 800px;
             background: #FBE39D;
-            backdrop-filter: blur(8px); /* Ensure this is applied correctly */
+            padding: 20px;
+            margin-bottom: 30px;
             border-radius: 10px;
-            margin-top: 20px height: 200px; /* Set a height to center vertically */
-            margin-bottom: 20px;
-            display: flex; /* Use flexbox */
-            flex-direction: column; /* Stack items vertically */
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            text-align: center; /* Center text horizontally */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #481D01;
+        }
+
+        /* Table Styling */
+        .section table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .section table th,
+        .section table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .section table th {
+            background-color: #F6C324;
+            color: white;
+            font-weight: bold;
+        }
+
+        .section table td {
+            background-color: #FBE39D;
+        }
+
+        .section table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .section table tr:hover td {
+            background-color: #e1e1e1;
+        }
+
+        .section table td[colspan="4"] {
+            text-align: center;
+            font-style: italic;
         }
     </style>
 </head>
@@ -185,6 +190,7 @@
             <a href="ViewAccount.jsp">Account</a>
         </div>
     </div>
+
     <!-- Head Bar -->
     <div class="head-bar">
         <div class="title">Dashboard</div>
@@ -196,16 +202,96 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="blurred-box">
-        	<h2>WELCOME TO DASHBOARD</h2>
-            <h1>KEDAI KEREPEK MAKSU</h1>
+        <!-- View Sales Section -->
+        <div class="section">
+            <h2>View Sales (History)</h2>
+            <%
+			    String saleDateParam = request.getParameter("saleDate");
+			
+			    // Default to today's date if no date is provided
+			    if (saleDateParam == null || saleDateParam.trim().isEmpty()) {
+			        saleDateParam = java.time.LocalDate.now().toString();
+			    }
+			
+			    // Convert the String saleDateParam to java.sql.Date
+			    java.sql.Date saleDate = java.sql.Date.valueOf(saleDateParam);
+			%>
+            <table>
+			    <thead>
+			        <tr>
+			            <th>Sale ID</th>
+			            <th>Sale Date</th>
+			            <th>Total Amount</th>
+			            <th>Payment Method</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <%
+			            SaleDAO saleDAO = new SaleDAO(); // Initialize DAO
+			            List<Sale> salesList = saleDAO.getSalesByDate(saleDate); // Call the method
+			
+			            if (salesList != null && !salesList.isEmpty()) {
+			                for (Sale sale : salesList) {
+			        %>
+			                    <tr>
+			                        <td><%= sale.getSaleId() %></td>
+			                        <td><%= sale.getSaleDate() %></td>
+			                        <td><%= sale.getTotalAmount() %></td>
+			                        <td><%= sale.getPaymentMethod() %></td>
+			                    </tr>
+			        <%
+			                }
+			            } else {
+			        %>
+			                <tr>
+			                    <td colspan="4">No sales found for the selected date: <%= saleDate %>.</td>
+			                </tr>
+			        <%
+			            }
+			        %>
+			    </tbody>
+			</table>
+        </div>
+
+        <!-- View Product and Stock Section -->
+        <div class="section">
+            <h2>View Product and Stock</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Quantity in Stock</th>
+                        <th>Restock Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% 
+                        // Fetch product list
+                        ProductDAO productDAO = new ProductDAO();
+                        List<Product> productList = productDAO.getAllActiveProducts();
+                        if (productList != null && !productList.isEmpty()) {
+                            for (Product product : productList) {
+                    %>
+                                <tr>
+                                    <td><%= product.getProdId() %></td>
+                                    <td><%= product.getProdName() %></td>
+                                    <td><%= product.getQuantityStock() %></td>
+                                    <td><%= product.getRestockLevel() %></td>
+                                </tr>
+                    <% 
+                            }
+                        } else { 
+                    %>
+                            <tr>
+                                <td colspan="4">No products available.</td>
+                            </tr>
+                    <% 
+                        } 
+                    %>
+                </tbody>
+            </table>
         </div>
     </div>
-    <% 
-    String successMessage = (String) request.getAttribute("success");
-    if (successMessage != null) {
-        out.println("<div class='success'>" + successMessage + "</div>");
-    }
-%>
 </body>
 </html>

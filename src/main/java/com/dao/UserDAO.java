@@ -14,7 +14,8 @@ public class UserDAO {
 
     // Method to create an owner
     public boolean createOwner(String username, String password, String phone, String address) {
-        String sql = "INSERT INTO USERS (USER_NAME, USER_ROLE, USER_PASS, USER_PHONE, USER_ADDRESS, ACC_STATUS) VALUES (?, 'OWNER', ?, ?, ?, 'ACTIVE')";
+    	String sql = "INSERT INTO USERS (USER_ID, USER_NAME, USER_ROLE, USER_PASS, USER_PHONE, USER_ADDRESS, ACC_STATUS) VALUES (USERS_SEQ.NEXTVAL, ?, 'OWNER', ?, ?, ?, 'ACTIVE')";
+
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -34,32 +35,28 @@ public class UserDAO {
 
     // Method to log in a user
     public User loginUser(String username, String password) {
-        String query = "SELECT * FROM USERS WHERE USER_NAME = ?";
+        // Update the query to match the database schema
+        String query = "SELECT * FROM Users WHERE USER_NAME = ? AND USER_PASS = ?";
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username); // Bind username to USER_NAME
+            statement.setString(2, password); // Bind password to USER_PASS
 
-            if (rs.next()) {
-                String storedPassword = rs.getString("USER_PASS");  // Retrieve stored plain-text password
+            ResultSet resultSet = statement.executeQuery();
 
-                // Compare the provided password with the stored password
-                if (password.equals(storedPassword)) {
-                    User user = new User();
-                    user.setId(rs.getInt("USER_ID"));
-                    user.setName(rs.getString("USER_NAME"));
-                    user.setRole(rs.getString("USER_ROLE"));
-                    user.setPhone(rs.getString("USER_PHONE"));
-                    user.setAddress(rs.getString("USER_ADDRESS"));
-                    return user;
-                }
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("USER_ID")); // Match USER_ID column
+                user.setName(resultSet.getString("USER_NAME")); // Match USER_NAME column
+                user.setRole(resultSet.getString("USER_ROLE")); // Match USER_ROLE column
+                return user; // Return the user object
             }
-        } catch (SQLException e) {
-            System.err.println("Error logging in user: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Return null if no match is found
+        return null; // Return null if no user is found
     }
+
 
     // Method to create a staff account
     public boolean createStaff(String username, String password, String phone, String address, int ownerId) {
@@ -102,14 +99,17 @@ public class UserDAO {
     }
 
     // Method to update a user's account
-    public boolean updateUserAccount(int userId, String phone, String address) {
-        String sql = "UPDATE USERS SET USER_PHONE = ?, USER_ADDRESS = ? WHERE USER_ID = ?";
+    public boolean updateUserAccount(int userId, String username, String phone, String address, String role, String status) {
+        String sql = "UPDATE USERS SET USER_NAME = ?, USER_PHONE = ?, USER_ADDRESS = ?, USER_ROLE = ?, ACC_STATUS = ? WHERE USER_ID = ?";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-            stmt.setString(1, phone);
-            stmt.setString(2, address);
-            stmt.setInt(3, userId);
+            stmt.setString(1, username);
+            stmt.setString(2, phone);
+            stmt.setString(3, address);
+            stmt.setString(4, role);
+            stmt.setString(5, status);
+            stmt.setInt(6, userId);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

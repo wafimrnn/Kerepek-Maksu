@@ -21,39 +21,32 @@ public class ViewAccountServlet extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * Handles GET requests to display accounts.
      */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve user from the session
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        
-        if (user == null) {
-            response.sendRedirect("Login.html"); // Redirect to login page if user is not found
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            response.sendRedirect("Login.html"); // Redirect to login page if user is not logged in
+            return;
         }
 
-        // Check if user is logged in (user object should not be null)
-        if (user != null) {
-            // Retrieve the staff list for the owner
-            UserDAO userDAO = new UserDAO();
-            List<User> staffList = userDAO.getStaffByOwnerId(user.getId());
+        // Fetch the updated user information from the database
+        UserDAO userDAO = new UserDAO();
+        User updatedUser = userDAO.getUserById(sessionUser.getId());
 
-            // Set user and staffList as attributes to pass to the JSP
-            request.setAttribute("user", user);
-            request.setAttribute("staffList", staffList);
-
-            // Forward to the JSP page
-            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
-        } else {
-            // If user is not logged in, redirect to login page or show an error
-            response.sendRedirect("Login.html");
+        // Update session data with the latest user details
+        if (updatedUser != null) {
+            session.setAttribute("user", updatedUser);
         }
-    }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        // Fetch staff list (if applicable) and set as request attribute
+        List<User> staffList = userDAO.getStaffByOwnerId(sessionUser.getId());
+        request.setAttribute("staffList", staffList);
+
+        // Forward to the JSP page
+        request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
     }
 }

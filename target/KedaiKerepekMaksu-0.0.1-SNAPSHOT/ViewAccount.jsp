@@ -295,8 +295,8 @@
         }
         
         function logout() {
-          // Redirect to login page
-          window.location.href = "/LogoutServlet";
+            // Adjust for context path
+            window.location.href = "/KedaiKerepekMaksu/LogoutServlet";
         }
     </script>
     <script src="js/account.js"></script>

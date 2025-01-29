@@ -11,9 +11,10 @@ document.querySelectorAll(".add-to-order").forEach(button => {
 
 // Function to toggle between payment methods
 function togglePayment(method) {
-    document.getElementById("cash").style.display = method === "cash" ? "block" : "none";
-    document.getElementById("qr").style.display = method === "qr" ? "block" : "none";
-    document.getElementById("payment-method").value = method;
+    const formattedMethod = method.toUpperCase(); // Convert method to uppercase
+    document.getElementById("CASH").style.display = formattedMethod === "CASH" ? "block" : "none";
+    document.getElementById("QR").style.display = formattedMethod === "QR" ? "block" : "none";
+    document.getElementById("payment-method").value = formattedMethod; // Set the uppercase value
 }
 
 // Function to add items to the order
@@ -94,29 +95,32 @@ function calculateChange() {
 function completeOrder() {
     const totalAmount = parseFloat(document.getElementById("total-amount").value) || 0;
     const paymentMethod = document.getElementById("payment-method").value;
-    const userId = 5; // Replace with actual logic to get the logged-in user's ID
-    const saleDate = new Date().toISOString().split("T")[0]; // Current date in yyyy-MM-dd format
+    const saleDate = new Date().toISOString().split("T")[0];
 
     if (totalAmount > 0) {
         const orderItems = [];
         document.querySelectorAll("#order-items tr").forEach((row) => {
-            const prodId = parseInt(row.getAttribute("data-product-id")); // Get prodId from data attribute
-            const qty = parseInt(row.querySelector(".qty input").value); // Get the input value for quantity
+            const prodId = parseInt(row.getAttribute("data-product-id"));
+            const qty = parseInt(row.querySelector(".qty input").value);
             const subtotal = parseFloat(row.querySelector(".subtotal").textContent.replace("RM ", ""));
-            orderItems.push({ prodId, qty, subtotal }); // Use prodId in the order item
+            orderItems.push({ prodId, qty, subtotal });
         });
 
-        // Prepare data to send
+        // Ensure orderItems is not empty
+        if (orderItems.length === 0) {
+            alert("No items in the order!");
+            return;
+        }
+
         const requestData = {
             totalAmount: totalAmount,
             paymentMethod: paymentMethod,
-            userId: userId,
             saleDate: saleDate,
             orderItems: orderItems,
         };
 
-        // Send POST request to the backend
-        fetch("http://localhost:8088/KedaiKerepekMaksu/CompleteSaleServlet", {
+        // Send POST request
+        fetch("/KedaiKerepekMaksu/completeSale", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -124,39 +128,19 @@ function completeOrder() {
             body: JSON.stringify(requestData),
         })
             .then((response) => {
-                if (response.ok) {
-                    return response.json(); // Assuming backend returns JSON
-                } else {
-                    throw new Error("Failed to complete the order.");
-                }
+                if (response.ok) return response.json();
+                else throw new Error("Failed to complete the order.");
             })
             .then((data) => {
-                // Handle successful response
-                const responseMessage = document.getElementById("response-message");
-                responseMessage.style.display = "block";
-                responseMessage.textContent = "Order Completed Successfully!";
-                responseMessage.style.color = "green";
-
-                // Clear the order items and reset totals
+                alert("Order Completed Successfully!");
+                // Reset UI
                 document.getElementById("order-items").innerHTML = "";
-                document.getElementById("subtotal").textContent = "RM 0";
-                document.getElementById("total").textContent = "RM 0";
-                document.getElementById("total-amount").value = 0;
-                document.getElementById("money-received").value = "";
-                document.getElementById("change").value = "";
+                updateTotals();
             })
             .catch((error) => {
-                // Handle errors
-                const responseMessage = document.getElementById("response-message");
-                responseMessage.style.display = "block";
-                responseMessage.textContent = "Error: " + error.message;
-                responseMessage.style.color = "red";
+                alert("Error: " + error.message);
             });
     } else {
-        // Show error if no items in the order
-        const responseMessage = document.getElementById("response-message");
-        responseMessage.style.display = "block";
-        responseMessage.textContent = "No items in the order to complete!";
-        responseMessage.style.color = "red";
+        alert("No items in the order to complete!");
     }
 }

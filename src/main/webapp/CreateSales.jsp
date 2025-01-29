@@ -319,6 +319,10 @@
 		    color: black;
 		}
     </style>
+    <script>
+        const userId = ${sessionScope.userId};
+        console.log("Logged in user ID: ", userId);
+    </script>
 </head>
 <body>
     <!-- Sidebar Section -->
@@ -399,7 +403,7 @@
                 <button onclick="togglePayment('qr')">QR Payment</button>
             </div>
 
-            <div id="cash" class="payment-details">
+            <div id="CASH" class="payment-details">
                 <h3>Cash Payment</h3>
                 <input type="text" id="money-received" placeholder="Money Received" oninput="calculateChange()">
                 <input type="hidden" id="total-amount" value="0">
@@ -408,7 +412,7 @@
                 <button onclick="completeOrder()">Complete Order</button>
             </div>
 
-            <div id="qr" class="payment-details">
+            <div id="QR" class="payment-details">
                 <h3>QR Payment</h3>
                 <input type="hidden" id="total-amount" value="0">
                 <input type="hidden" id="payment-method" value="qr">
@@ -422,6 +426,6 @@
         </div>
    
 
-    <script src="js/pos.js"></script>
+    <script src="pos.js"></script>
 </body>
 </html>

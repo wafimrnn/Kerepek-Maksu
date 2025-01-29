@@ -23,7 +23,7 @@ public class DeleteProductServlet extends HttpServlet {
 
         if (prodIdParam == null || prodIdParam.isEmpty()) {
             request.setAttribute("error", "Product ID is missing.");
-            request.getRequestDispatcher("ViewProduct.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewProductServlet").forward(request, response);
             return;
         }
 
@@ -32,7 +32,7 @@ public class DeleteProductServlet extends HttpServlet {
             prodId = Integer.parseInt(prodIdParam);
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid Product ID format.");
-            request.getRequestDispatcher("ViewProduct.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewProductServlet").forward(request, response);
             return;
         }
 
@@ -42,23 +42,23 @@ public class DeleteProductServlet extends HttpServlet {
             if (!updateProductStatusToInactive(conn, prodId)) {
                 request.setAttribute("error", "Failed to update product status.");
                 conn.rollback();
-                request.getRequestDispatcher("ViewProduct.jsp").forward(request, response);
+                request.getRequestDispatcher("ViewProductServlet").forward(request, response);
                 return;
             }
 
             if (!deleteChildRecord(conn, prodId)) {
                 request.setAttribute("error", "Failed to delete associated records.");
                 conn.rollback();
-                request.getRequestDispatcher("ViewProduct.jsp").forward(request, response);
+                request.getRequestDispatcher("ViewProductServlet").forward(request, response);
                 return;
             }
 
             conn.commit(); // Commit transaction
-            response.sendRedirect("ViewProduct.jsp");
+            response.sendRedirect("ViewProductServlet");
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error deleting product.");
-            request.getRequestDispatcher("ViewProduct.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewProductServlet").forward(request, response);
         }
     }
 

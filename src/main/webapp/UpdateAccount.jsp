@@ -265,41 +265,76 @@
 
     <!-- Main Content -->
     <div class="main-content">
-    <div class="blurred-box">
-        <h2>Update Account</h2>
-        <div class="form-container">
-            <form action="UpdateAccountServlet" method="post">
-                	<div class="form-group">
-                       <label for="username">Username:</label>
-                       <input type="text" id="username" name="username" required>
+        <div class="blurred-box">
+            <h2>Update Account</h2>
+
+            <!-- Feedback Messages -->
+            <% String message = (String) request.getAttribute("message");
+			   String error = (String) request.getAttribute("error");
+			%>
+			
+			<% if (message != null) { %>
+			    <div style="color: green;"><%= message %></div>
+			<% } %>
+			<% if (error != null) { %>
+			    <div style="color: red;"><%= error %></div>
+			<% } %>
+            <div class="form-container">
+                <form action="UpdateAccountServlet" method="post">
+                    <!-- Hidden User ID Field -->
+                    <input type="hidden" name="userId" value="${userId}" />
+
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            value="${username}">
                     </div>
+                    
                     <div class="form-group">
                         <label for="phone">Phone:</label>
-                        <input type="text" id="phone" name="phone" required>
+                        <input 
+                            type="text" 
+                            id="phone" 
+                            name="phone" 
+                            value="${phone}">
                     </div>
+                    
                     <div class="form-group">
                         <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" required>
+                        <input 
+                            type="text" 
+                            id="address" 
+                            name="address" 
+                            value="${address}">
                     </div>
+                    
                     <div class="form-group">
                         <label for="role">Role:</label>
                         <select id="role" name="role" required>
-                            <option value="Owner">Owner</option>
-                            <option value="staff">Staff</option>
-                        </select>
+						    <option value="OWNER">OWNER</option>
+						    <option value="STAFF">STAFF</option>
+						</select>
                     </div>
+                    
                     <div class="form-group">
                         <label for="status">Account Status:</label>
                         <select id="status" name="status" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="active" ${status == 'active' ? 'selected' : ''}>Active</option>
+                            <option value="inactive" ${status == 'inactive' ? 'selected' : ''}>Inactive</option>
                         </select>
                     </div>
-                <button type="submit">Update Account</button>
-                <button type="button" class="cancel-button" onclick="window.location.href='ViewAccountServlet'">Cancel</button>
-            </form>
+                    
+                    <button type="submit">Update Account</button>
+                    <button 
+                        type="button" 
+                        class="cancel-button" 
+                        onclick="window.location.href='ViewAccountServlet'">Cancel</button>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 </body>
 </html>

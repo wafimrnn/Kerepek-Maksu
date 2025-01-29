@@ -27,15 +27,6 @@
   </servlet-mapping>
 
   <servlet>
-      <servlet-name>LogoutServlet</servlet-name>
-      <servlet-class>com.controller.account.LogoutServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-      <servlet-name>LogoutServlet</servlet-name>
-      <url-pattern>/LogoutServlet</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
       <servlet-name>SignUpServlet</servlet-name>
       <servlet-class>com.controller.account.SignUpServlet</servlet-class>
   </servlet>
@@ -116,16 +107,6 @@
   <servlet-mapping>
       <servlet-name>ReportController</servlet-name>
       <url-pattern>/ReportController</url-pattern>
-  </servlet-mapping>
-
-  <!-- Servlet Mappings for com.controller.sale -->
-  <servlet>
-      <servlet-name>CompleteSaleServlet</servlet-name>
-      <servlet-class>com.controller.sale.CompleteSaleServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-      <servlet-name>CompleteSaleServlet</servlet-name>
-      <url-pattern>/CompleteSaleServlet</url-pattern>
   </servlet-mapping>
 
 </web-app>

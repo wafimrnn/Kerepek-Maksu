@@ -22,6 +22,7 @@
 
     .container {
       display: flex;
+      position: relative;
       flex-direction: row;
       align-items: center;
       width: 90%;
@@ -33,11 +34,11 @@
       backdrop-filter: blur(1px);
       -webkit-backdrop-filter: blur(1px);
     }
-
+    
     .left-section {
       flex: 1;
       padding: 40px;
-      text-align: left;
+      text-align:center;
     }
 
     .left-section h1 {
@@ -54,7 +55,7 @@
     .form-box {
       width: 100%;
       max-width: 400px;
-      margin: 0 auto;
+      margin: 20 auto;
       padding: 20px;
     }
 
@@ -127,13 +128,16 @@
 </head>
 <body>
   <div class="container">
-    <div class="left-section">
-      <h1>Kedai Kerepek Maksu</h1>
-    </div>
-
+  <div class="left-section">
+  	<h1>Kedai Kerepek Maksu</h1>
+  </div>
+    
     <div class="right-section">
+      <!-- Login Form -->
       <div class="form-box" id="login-form">
         <h1>Login</h1>
+        <!-- Feedback message -->
+        <p id="login-message" style="color: red;"></p>
         <form id="login-form-data" action="LoginServlet" method="POST">
           <input id="login-username" name="userName" type="text" placeholder="Username" required>
           <input id="login-password" name="password" type="password" placeholder="Password" required>
@@ -144,17 +148,19 @@
         </div>
       </div>
 
+      <!-- Sign Up Form -->
       <div class="form-box" id="signup-form" style="display: none;">
         <h1>Sign Up</h1>
+        <!-- Feedback message -->
+        <p id="signup-message" style="color: red;"></p>
         <form id="signup-form-data" action="SignUpServlet" method="POST">
           <input id="signup-username" name="userName" type="text" placeholder="Username" required>
           <input id="signup-password" name="password" type="password" placeholder="Password" required>
           <input id="signup-phone" name="phone" type="text" placeholder="Phone Number" required>
-          <select id="signup-role" name="role" required>
-            <option value="">Select Role</option>
-            <option value="OWNER">OWNER</option>
-            <option value="STAFF">STAFF</option>
-          </select>
+          
+          <!-- Hidden input for the role -->
+          <input type="hidden" id="signup-role" name="role" value="OWNER">
+          
           <textarea id="signup-address" name="address" placeholder="Address" rows="3" required></textarea>
           <button type="submit">Sign Up</button>
         </form>
@@ -164,6 +170,7 @@
       </div>
     </div>
   </div>
-<script src="login.js?v=1.0"></script>
+    <script src="login.js"></script>
 </body>
+
 </html>

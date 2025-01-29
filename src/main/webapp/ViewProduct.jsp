@@ -271,130 +271,112 @@
     </div>
 
     <!-- Head Bar -->
-	<div class="head-bar">
-	    <div class="title">Products</div>
-	    <div class="icons">
-	        <i class="fas fa-bell" id="notification-icon" title="Notifications"></i>
-	        <i class="fas fa-user-circle" title="Account"></i>
-	    </div>
-	</div>
-
-    <!-- Main Content -->
-<div class="main-content">
-    <div class="blurred-box">
-        <!-- Header with Title and Add Product Button -->
-        <div class="header">
-            <h1>Products</h1>
-            <a href="CreateProduct.html" class="add-btn">Add Product</a>
-        </div>
-
-        <!-- Product Catalog -->
-        <div class="product-catalog">
-            <%
-                List<Product> products = (List<Product>) request.getAttribute("products");
-                if (products != null && !products.isEmpty()) {
-                    for (Product product : products) {
-                        String imagePath = product.getImagePath();
-                        if (imagePath == null || imagePath.isEmpty()) {
-                            imagePath = "img/default-image.jpg"; 
-                        }
-
-                        // If product is active, don't show "Update Status" button
-                        if (!"inactive".equals(product.getProdStatus())) {
-            %>
-                        <div class="product-card">
-                            <img src="<%= imagePath %>" alt="<%= product.getProdName() %>">
-                            <h3><%= product.getProdName() %></h3>
-                            <p>Price: RM <%= product.getProdPrice() %></p>
-                            <p>Stock: <%= product.getQuantityStock() %></p>
-
-                            <div class="button-group">
-                                <button class="update-btn" onclick="location.href='UpdateProductServlet?prodId=<%= product.getProdId() %>'">
-                                    Update
-                                </button>
-                                <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-            <% 
-                        }
-                    }
-                } else {
-            %>
-                    <p>No products available.</p>
-            <%
-                }
-            %>
-        </div>
-
-        <!-- Hardcoded Owner-Specific Section for Inactive Products -->
-        <div class="inactive-products-section">
-            <h2>Inactive Products</h2>
-            <% 
-			    String userRole = (String) session.getAttribute("userRole");
-			    if ("OWNER".equals(userRole) && products != null) {  // Ensure products are not null
-			        for (Product product : products) {
-			            if ("inactive".equals(product.getProdStatus())) {
-			%>
-			            <div class="product-card inactive-product">
-			                <img src="<%= product.getImagePath() != null ? product.getImagePath() : "img/default-image.jpg" %>" alt="<%= product.getProdName() %>">
-			                <h3><%= product.getProdName() %></h3>
-			                <p>Price: RM <%= product.getProdPrice() %></p>
-			                <p>Stock: <%= product.getQuantityStock() %></p>
-			                <p>Status: Inactive</p>
-			
-			                <div class="button-group">
-			                    <button class="update-status-btn" onclick="location.href='UpdateProductStatusServlet?prodId=<%= product.getProdId() %>'">
-			                        Update Status
-			                    </button>
-			                    <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
-			                        Delete
-			                    </button>
-			                </div>
-			            </div>
-			<% 
-			            }
-			        }
-			    }
-			%>
+    <div class="head-bar">
+        <div class="title">Products</div>
+        <div class="icons">
+            <i class="fas fa-bell" id="notification-icon" title="Notifications"></i>
+            <i class="fas fa-user-circle" title="Account"></i>
         </div>
     </div>
-</div>
 
-
-
-    <!-- Simple Popup Modal for Confirmation -->
-    <div id="popup-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <h2>Are you sure you want to update the product status?</h2>
-            <div class="button-group">
-                <button class="update-btn" onclick="updateStatus()">Yes</button>
-                <button class="delete-btn" onclick="closePopup()">No</button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="blurred-box">
+            <!-- Header with Title and Add Product Button -->
+            <div class="header">
+                <h1>Products</h1>
+                <a href="CreateProduct.html" class="add-btn">Add Product</a>
             </div>
+
+            <!-- Product Catalog -->
+            <div class="product-catalog">
+                <% 
+                    List<Product> products = (List<Product>) request.getAttribute("products");
+                    if (products != null && !products.isEmpty()) {
+                        for (Product product : products) {
+                            String imagePath = product.getImagePath();
+                            if (imagePath == null || imagePath.isEmpty()) {
+                                imagePath = "img/default-image.jpg";
+                            }
+                            if (!"inactive".equals(product.getProdStatus())) {
+                %>
+                            <div class="product-card">
+                                <img src="<%= imagePath %>" alt="<%= product.getProdName() %>">
+                                <h3><%= product.getProdName() %></h3>
+                                <p>Price: RM <%= product.getProdPrice() %></p>
+                                <p>Stock: <%= product.getQuantityStock() %></p>
+                                <div class="button-group">
+                                    <button class="update-btn" onclick="location.href='UpdateProductServlet?prodId=<%= product.getProdId() %>'">
+                                        Update
+                                    </button>
+                                    <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                <% 
+                            }
+                        }
+                    } else { 
+                %>
+                    <p>No products available.</p>
+                <% 
+                    } 
+                %>
+            </div>
+
+            <!-- Owner-Specific Section for Inactive Products -->
+            <% 
+                String userRole = (String) session.getAttribute("userRole");
+                if ("OWNER".equals(userRole)) { 
+            %>
+                <h2>Inactive Products</h2>
+                <div class="inactive-products-section">
+                    <% 
+                        boolean hasInactiveProducts = false;
+                        if (products != null) {
+                            for (Product product : products) {
+                                if ("inactive".equals(product.getProdStatus())) {
+                                    hasInactiveProducts = true;
+                    %>
+                                    <div class="product-card inactive-product">
+                                        <img src="<%= product.getImagePath() != null ? product.getImagePath() : "img/default-image.jpg" %>" alt="<%= product.getProdName() %>">
+                                        <h3><%= product.getProdName() %></h3>
+                                        <p>Price: RM <%= product.getProdPrice() %></p>
+                                        <p>Stock: <%= product.getQuantityStock() %></p>
+                                        <p>Status: Inactive</p>
+                                        <div class="button-group">
+                                            <button class="update-status-btn" onclick="location.href='UpdateProductStatusServlet?prodId=<%= product.getProdId() %>'">
+                                                Update Status
+                                            </button>
+                                            <button class="delete-btn" onclick="confirmDelete('<%= product.getProdId() %>')">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                    <% 
+                                }
+                            }
+                        }
+                        if (!hasInactiveProducts) { 
+                    %>
+                        <p>No inactive products available.</p>
+                    <% 
+                        } 
+                    %>
+                </div>
+            <% 
+                } 
+            %>
         </div>
     </div>
 
     <script>
- // Function to update the product status (mock-up)
-    	function updateStatus() {
-       	 	alert("Product status updated!");
-       		closePopup();
-   		}
-
-        // Confirm delete action
         function confirmDelete(prodId) {
             if (confirm("Are you sure you want to delete this product? This action cannot be undone.")) {
                 location.href = 'DeleteProductServlet?prodId=' + prodId;
             }
         }
     </script>
-
-    <!-- Optional: Notification Popup -->
-    <div id="notification-popup" style="display: none;">
-        <ul id="notification-list"></ul>
-    </div>
-    <script src="js/notification.js"></script>
 </body>
 </html>
